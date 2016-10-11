@@ -78,6 +78,12 @@
       </resource>
     </resources>
   </build>
+  <repositories>
+    <repository>
+      <id>lib</id>
+      <url>file://${project.basedir}/lib</url>
+    </repository>
+  </repositories>
   <dependencies>
     <!-- Compile/Runtime Dependencies -->
     <dependency>
@@ -104,9 +110,9 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>com.google.appengine.tools</groupId>
-      <artifactId>appengine-gcs-client</artifactId>
-      <version>[0.4,1.0)</version>
+      <groupId>appscale-gcs-sdk</groupId>
+      <artifactId>appscale-gcs-client</artifactId>
+      <version>0.6</version>
     </dependency>
     <!-- Test Dependencies -->
     <dependency>
