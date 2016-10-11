@@ -134,7 +134,9 @@ public class Jobs {
               int attempts = request.getIntHeader("X-AppEngine-TaskExecutionCount");
               if (attempts <= 5) {
                 log.info("Request to retry deferred task #" + attempts);
-                DeferredTaskContext.markForRetry();
+                /* SDK 1.8.4 does not support the markForRetry() method */
+                //DeferredTaskContext.markForRetry();
+                DeferredTaskContext.setDoNotRetry(false);
                 return;
               }
             }

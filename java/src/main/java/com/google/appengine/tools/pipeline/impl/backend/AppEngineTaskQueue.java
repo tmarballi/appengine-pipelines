@@ -15,9 +15,10 @@
 package com.google.appengine.tools.pipeline.impl.backend;
 
 import com.google.appengine.api.backends.BackendServiceFactory;
-import com.google.appengine.api.modules.ModulesException;
+/* Modules are not currently supported in AppScale 3.1.0 */
+/*import com.google.appengine.api.modules.ModulesException;
 import com.google.appengine.api.modules.ModulesService;
-import com.google.appengine.api.modules.ModulesServiceFactory;
+import com.google.appengine.api.modules.ModulesServiceFactory;*/
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueConstants;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -56,7 +57,13 @@ public class AppEngineTaskQueue implements PipelineTaskQueue {
   static final int MAX_TASKS_PER_ENQUEUE = QueueConstants.maxTasksPerAdd();
 
   private static final ExceptionHandler MODULES_EXCEPTION_HANDLER =
-      new ExceptionHandler.Builder().retryOn(ModulesException.class).build();
+      new ExceptionHandler.Builder().retryOn(Exception.class).build();
+
+  private static final String DEFAULT_MODULE_NAME = "module";
+
+  private static final String DEFAULT_MODULE_VERSION = "version0";
+
+  private static final String DEFAULT_MODULE_VERSION_HOSTNAME = "hostname";
 
   @Override
   public void enqueue(Task task) {
@@ -146,14 +153,18 @@ public class AppEngineTaskQueue implements PipelineTaskQueue {
       String versionHostname = RetryHelper.runWithRetries(new Callable<String>() {
         @Override
         public String call() {
-          ModulesService service = ModulesServiceFactory.getModulesService();
+          /* Modules are not currently supported in AppScale 3.1.0 */
+          //ModulesService service = ModulesServiceFactory.getModulesService();
           String module = queueSettings.getOnModule();
           String version = queueSettings.getModuleVersion();
           if (module == null) {
-            module = service.getCurrentModule();
-            version = service.getCurrentVersion();
+            /*module = service.getCurrentModule();
+            version = service.getCurrentVersion();*/
+            module = DEFAULT_MODULE_NAME;
+            version = DEFAULT_MODULE_VERSION;
           }
-          return service.getVersionHostname(module, version);
+          //return service.getVersionHostname(module, version);
+          return DEFAULT_MODULE_VERSION_HOSTNAME;
         }
       }, RetryParams.getDefaultInstance(), MODULES_EXCEPTION_HANDLER);
       taskOptions.header("Host", versionHostname);

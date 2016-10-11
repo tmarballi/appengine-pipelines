@@ -19,8 +19,9 @@ import com.google.appengine.api.backends.BackendServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Text;
-import com.google.appengine.api.modules.ModulesService;
-import com.google.appengine.api.modules.ModulesServiceFactory;
+/* Modules are not currently supported in AppScale 3.1.0 */
+/*import com.google.appengine.api.modules.ModulesService;
+import com.google.appengine.api.modules.ModulesServiceFactory;*/
 import com.google.appengine.tools.pipeline.Job;
 import com.google.appengine.tools.pipeline.JobInfo;
 import com.google.appengine.tools.pipeline.JobSetting;
@@ -140,6 +141,8 @@ public class JobRecord extends PipelineModelObject implements JobInfo {
   private static final String MODULE_VERSION_PROPERTY = "moduleVersion";
   private static final String CHILD_GRAPH_GUID_PROPERTY = "childGraphGuid";
   private static final String STATUS_CONSOLE_URL = "statusConsoleUrl";
+  private static final String DEFAULT_MODULE_NAME = "module";
+  private static final String DEFAULT_MODULE_VERSION = "version0";
   public static final String ROOT_JOB_DISPLAY_NAME = "rootJobDisplayName";
 
   // persistent fields
@@ -355,16 +358,24 @@ public class JobRecord extends PipelineModelObject implements JobInfo {
         if (currentBackend != null) {
           queueSettings.setOnBackend(currentBackend);
         } else {
-          ModulesService modulesService = ModulesServiceFactory.getModulesService();
+          /* Modules are not currently supported in AppScale 3.1.0 */
+          /*ModulesService modulesService = ModulesServiceFactory.getModulesService();
           queueSettings.setOnModule(modulesService.getCurrentModule());
-          queueSettings.setModuleVersion(modulesService.getCurrentVersion());
+          queueSettings.setModuleVersion(modulesService.getCurrentVersion());*/
+          queueSettings.setOnModule(DEFAULT_MODULE_NAME);
+          queueSettings.setModuleVersion(DEFAULT_MODULE_VERSION);
         }
       } else {
-        ModulesService modulesService = ModulesServiceFactory.getModulesService();
+        /*ModulesService modulesService = ModulesServiceFactory.getModulesService();
         if (module.equals(modulesService.getCurrentModule())) {
           queueSettings.setModuleVersion(modulesService.getCurrentVersion());
         } else {
           queueSettings.setModuleVersion(modulesService.getDefaultVersion(module));
+        }*/
+        if (module.equals(DEFAULT_MODULE_NAME)) {
+          queueSettings.setModuleVersion(DEFAULT_MODULE_VERSION);
+        } else {
+          queueSettings.setModuleVersion(DEFAULT_MODULE_VERSION);
         }
       }
     }
