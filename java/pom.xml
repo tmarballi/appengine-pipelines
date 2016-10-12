@@ -80,8 +80,8 @@
   </build>
   <repositories>
     <repository>
-      <id>lib</id>
-      <url>file://${project.basedir}/lib</url>
+      <id>gcs-lib</id>
+      <url>file://${project.basedir}/gcs-lib</url>
     </repository>
   </repositories>
   <dependencies>
